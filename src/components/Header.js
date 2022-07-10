@@ -20,9 +20,9 @@ class Header extends Component {
     }
     return data.currencies.map((currency) => {
       const currencyISO = {
-        $: "USD",
+        "$": "USD",
         "£": "GBP",
-        A$: "AUD",
+        "A$": "AUD",
         "¥": "JPY",
         "₽": "RUB",
       };
