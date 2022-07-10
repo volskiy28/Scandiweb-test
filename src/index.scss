@@ -436,7 +436,7 @@ a {
 }
 
 .dropdown-text:after {
-  content: url("../public/img/arrow.svg");
+  content: url("./assets/arrow.svg");
 
   transition: all 0.3s;
 
@@ -448,7 +448,7 @@ a {
 }
 
 .dropdown-text-aud:after {
-  content: url("../public/img/arrow.svg");
+  content: url("./assets/arrow.svg");
 
   transition: all 0.3s;
 

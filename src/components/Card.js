@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import cartImg from "../assets/Common.svg"
 
 class Card extends Component {
   displayInStock = () => {
@@ -32,7 +33,7 @@ class Card extends Component {
           <img
             width={52}
             height={52}
-            src="/img/Common.svg"
+            src={cartImg}
             alt="item_img"
             className="add_to_cart"
           />

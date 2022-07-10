@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 import { getAllProducts } from "../query/getQueries";
 import CartOverlay from "./CartOverlay";
 import Dropdown from "./Dropdown";
+import logo from "../assets/a-logo.svg"
 
 class Header extends Component {
   constructor(props) {
@@ -61,7 +62,7 @@ class Header extends Component {
 
                 <div className="logo">
                   <img
-                    src="/img/a-logo.svg"
+                    src={logo}
                     alt="logo"
                     width={40}
                     height={40}
@@ -77,7 +78,7 @@ class Header extends Component {
                       width={20}
                       height={20}
                       alt="cart"
-                      src="/img/cart.png"
+                      src={require ("../assets/cart.png") }
                     />
                   </button>
                   {cartOpen && (
