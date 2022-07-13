@@ -1,12 +1,3 @@
-const getOccurrence = (array, productName) => {
-    let count = 1;
-  
-    array.forEach((v) => {
-      return v.slice(0, productName.length) === productName && count++;
-    });
-    return count;
-  };
-  
   const convertHexToSwatch = () => {
     const productColor = document.querySelector('.product-color').childNodes;
     productColor.forEach((child) => {

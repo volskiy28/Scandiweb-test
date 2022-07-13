@@ -61,7 +61,7 @@ class App extends Component {
               }
               const { categories } = data;
               const { currencyKey, orders, itemNames } = this.state;
-              console.log(currencyKey)
+
               return (
                 <div>
                   <Header
