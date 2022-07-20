@@ -19,18 +19,20 @@ class App extends Component {
     this.addToOrder = this.addToOrder.bind(this);
   }
   componentDidMount() {
-    const currencyDropdown = document.querySelector(".dropdown-text");
+    let currencyDropdown = document.querySelector(".dropdown-text");
     document.addEventListener("click", () => {
       switch (currencyDropdown.textContent.charAt(0)) {
         case "£":
+          this.forceUpdate()
           this.setState({
             currencyKey: 1,
           });
           break;
         case "A":
-          this.setState({
-            currencyKey: 2,
-          });
+          this.forceUpdate()
+            this.setState({
+              currencyKey: 2,
+            });
           break;
         case "¥":
           this.setState({
@@ -64,14 +66,12 @@ class App extends Component {
 
               return (
                 <div>
-                  <Header
-                    currency={currencyKey}
-                    orders={orders}
-                    data={data}
-                    total={this.state.total}
-                  />
+                  <Header currency={currencyKey} orders={orders} data={data} />
                   <Routes>
-                    <Route path="/Scandiweb-test" element={<Navigate to="/all" />} />
+                    <Route
+                      path="/Scandiweb-test"
+                      element={<Navigate to="/all" />}
+                    />
                     <Route
                       path={`/${categories[0].name}`}
                       element={
@@ -117,7 +117,6 @@ class App extends Component {
                       path="/cart"
                       element={
                         <Cart
-                          total={this.state.total}
                           orders={this.state.orders}
                           currency={currencyKey}
                         />

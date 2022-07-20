@@ -26,8 +26,10 @@ class Card extends Component {
           className="card-img"
           alt="card_img"
         />
-        <span>{this.props.name}</span>
+       <div className="title_price">
+       <span>{this.props.name}</span>
         <b>{this.props.price}</b>
+        </div>
         <div
         >
           <img

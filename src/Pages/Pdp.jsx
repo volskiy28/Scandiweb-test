@@ -1,8 +1,11 @@
 import { Query } from "@apollo/react-components";
 import React, { Component } from "react";
 import { productRequest } from "../query/getQueries";
-import { convertHexToSwatch, getSelectedAtr,
-  getSelectedCol, } from "../utils/utilFunc";
+import {
+  convertHexToSwatch,
+  getSelectedAtr,
+  getSelectedCol,
+} from "../utils/utilFunc";
 export default class Pdp extends Component {
   constructor(props) {
     super(props);
@@ -59,6 +62,7 @@ export default class Pdp extends Component {
             return <div>loading</div>;
           }
           const { product } = data;
+          const parse = require("html-react-parser");
           return (
             <div
               className="PDP"
@@ -139,67 +143,71 @@ export default class Pdp extends Component {
                         {product.prices[currency].currency.symbol}
                         {product.prices[currency].amount}
                       </b>
-                      {product.inStock ? 
-                        <button  onClick={() => {
-                          let allAttributes = document.querySelectorAll(
-                            ".product-attributes"
-                          );
-                          let colorAttributes =
-                            document.querySelectorAll(".product-color");
+                      {product.inStock ? (
+                        <button
+                          onClick={() => {
+                            let allAttributes = document.querySelectorAll(
+                              ".product-attributes"
+                            );
+                            let colorAttributes =
+                              document.querySelectorAll(".product-color");
 
-                          if (
-                            getSelectedAtr().length !== allAttributes.length ||
-                            getSelectedCol().length !== colorAttributes.length
-                          ) {
-                            alert("Please select product attributes");
-                          } else {
                             if (
-                              !itemNames.includes(
-                                product.name +
-                                  getSelectedAtr()
-                                    .map((val) => val.value)
-                                    .join("") +
-                                  getSelectedCol()
-                                    .map((val) => val.value)
-                                    .join("")
-                              )
+                              getSelectedAtr().length !==
+                                allAttributes.length ||
+                              getSelectedCol().length !== colorAttributes.length
                             ) {
-                              onAdd(
-                                [
-                                  [product],
-                                  [getSelectedAtr()],
-                                  [getSelectedCol()],
+                              alert("Please select product attributes");
+                            } else {
+                              if (
+                                !itemNames.includes(
+                                  product.name +
+                                    getSelectedAtr()
+                                      .map((val) => val.value)
+                                      .join("") +
+                                    getSelectedCol()
+                                      .map((val) => val.value)
+                                      .join("")
+                                )
+                              ) {
+                                onAdd(
                                   [
-                                    product.name +
-                                      getSelectedAtr()
-                                        .map((val) => val.value)
-                                        .join("") +
-                                      getSelectedCol()
-                                        .map((val) => val.value)
-                                        .join(""),
+                                    [product],
+                                    [getSelectedAtr()],
+                                    [getSelectedCol()],
+                                    [
+                                      product.name +
+                                        getSelectedAtr()
+                                          .map((val) => val.value)
+                                          .join("") +
+                                        getSelectedCol()
+                                          .map((val) => val.value)
+                                          .join(""),
+                                    ],
                                   ],
-                                ],
 
-                                product.name +
-                                  getSelectedAtr()
-                                    .map((val) => val.value)
-                                    .join("") +
-                                  getSelectedCol()
-                                    .map((val) => val.value)
-                                    .join("")
-                              );
-                        }}}} className="add_to_cart_btn"> Add to cart </button>
-                       : 
+                                  product.name +
+                                    getSelectedAtr()
+                                      .map((val) => val.value)
+                                      .join("") +
+                                    getSelectedCol()
+                                      .map((val) => val.value)
+                                      .join("")
+                                );
+                              }
+                            }
+                          }}
+                          className="add_to_cart_btn"
+                        >
+                          Add to cart
+                        </button>
+                      ) : (
                         <button className="add_to_cart_btn out-of-stock">
                           Out of stock
                         </button>
-                        }
+                      )}
 
-                      <p
-                        dangerouslySetInnerHTML={{
-                          __html: product.description,
-                        }}
-                      ></p>
+                      <p> {parse(product.description)}</p>
                     </div>
                   </div>
                 </div>

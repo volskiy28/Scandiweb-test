@@ -2,15 +2,18 @@ import { Query } from "@apollo/react-components";
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { getAllProducts } from "../query/getQueries";
+import { getAllCategories } from "../query/getQueries";
+import { graphql } from '@apollo/client/react/hoc';
 import CartOverlay from "./CartOverlay";
 import Dropdown from "./Dropdown";
-import logo from "../assets/a-logo.svg"
+import logo from "../assets/a-logo.svg";
 
 class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
       cartOpen: false,
+      currencyKey: 0
     };
   }
   displayCurrencySymbols() {
@@ -23,7 +26,7 @@ class Header extends Component {
       const currencyISO = {
         "$": "USD",
         "£": "GBP",
-        "A$": "AUD",
+        A$: "AUD",
         "¥": "JPY",
         "₽": "RUB",
       };
@@ -34,8 +37,8 @@ class Header extends Component {
 
   render() {
     const { cartOpen } = this.state;
-    const { orders, currency, total } = this.props;
-    console.log(currency);
+    const { orders, currency } = this.props;
+
     return (
       <Query query={getAllProducts}>
         {({ loading, data }) => {
@@ -61,12 +64,7 @@ class Header extends Component {
                 </div>
 
                 <div className="logo">
-                  <img
-                    src={logo}
-                    alt="logo"
-                    width={40}
-                    height={40}
-                  />
+                  <img src={logo} alt="logo" width={40} height={40} />
                 </div>
                 <div className="currency">
                   <Dropdown currencyList={this.displayCurrencySymbols()} />
@@ -78,16 +76,18 @@ class Header extends Component {
                       width={20}
                       height={20}
                       alt="cart"
-                      src={require ("../assets/cart.png") }
+                      src={require("../assets/cart.png")}
                     />
                   </button>
+                  {orders.length > 0 &&   <p className="cart_items_counter">  {orders.length}</p>}
                   {cartOpen && (
                     <div className="cart_overlay_bag">
-                      <CartOverlay
-                        currency={currency}
-                        orders={orders}
-                        total={total}
-                      />
+                      <div className="sidebar show-cart">
+                        <CartOverlay
+                          currency={currency}
+                          orders={orders}
+                        />
+                      </div>
                     </div>
                   )}
                 </div>
@@ -100,4 +100,6 @@ class Header extends Component {
   }
 }
 
-export default Header;
+
+export default graphql(getAllCategories)(Header);
+

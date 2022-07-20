@@ -1,6 +1,5 @@
 import React from 'react';
 
-
 export class Dropdown extends React.Component {
   constructor(props) {
     super(props);
@@ -11,6 +10,7 @@ export class Dropdown extends React.Component {
     };
   }
 
+  // Dropdown closes when users click outside the dd list
   componentDidMount() {
     const dd = document.querySelector('.dropdown');
     window.addEventListener('click', (e) => {
