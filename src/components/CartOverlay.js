@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
+import { getOccurrence } from "..//utils/utilFunc";
 
 export default class CartOverlay extends Component {
   constructor(props) {
@@ -29,11 +30,30 @@ export default class CartOverlay extends Component {
   }
 
   render() {
-    const { currency, orders } = this.props;
+    const {
+      currency,
+      orders,
+      addQuantity,
+      quantities,
+      removeQuantity,
+      emptyCart,
+      removeItem,
+    } = this.props;
+    let s = [];
+    orders.map((arr) => {
+      return arr[0].map((item) => {
+        return s.push(
+          item.prices[currency].amount *
+            getOccurrence(quantities, arr[3].join(""), arr[3].join(""))
+        );
+      });
+    });
+    let total = s.reduce((a, b) => a + b, 0);
     return (
-      <div className="cart_overlay_bag">
-        <h3>My bag</h3>
-        {orders.map((arr, index) => { return arr[0].map((item) => {
+      <div id="cart_overlay_bag" className="cart_overlay_bag">
+        <h3 id="quantity_gallery_block">My bag</h3>
+        {orders.map((arr, index) => {
+          return arr[0].map((item) => {
             return (
               <div className="cart_overlay">
                 <div className="mn">
@@ -47,7 +67,7 @@ export default class CartOverlay extends Component {
                     {item.attributes.map((atr, index) => {
                       if (atr.name !== "Color") {
                         return (
-                          <div className="attributes-section-product-page-bag">
+                          <div id="quantity_gallery_block" className="attributes-section-product-page-bag">
                             <p className="attribute-name-bag">{atr.name}:</p>
                             <ul className="product-attributes-bag">
                               {atr.items.map((atr2, index2) => {
@@ -102,27 +122,86 @@ export default class CartOverlay extends Component {
                       }
                     })}
                   </div>
-                  <div></div>
-                  <div className="quantity_block">
-                    <button className="add_quantity_btn">+</button>
-                    <p>1</p>
-                    <button className="add_quantity_btn">-</button>
-                  </div>
-                  <div className="cart_overlay_img">
-                    <img src={item.gallery[0]} alt={item.name} />
+                  <div id="quantity_gallery_block" className="quantity_gallery_block">
+                    <div id="quantity_block" className="quantity_block">
+                      <button
+                      id="quantity_gallery_block"
+                        onClick={() => {
+                          addQuantity(
+                            arr[3].join("") +
+                              getOccurrence(
+                                quantities,
+                                arr[3].join(""),
+                                arr[3].join("")
+                              )
+                          );
+                        }}
+                        className="add_quantity_btn"
+                      >
+                        +
+                      </button>
+                      <p>
+                        {getOccurrence(
+                          quantities,
+                          arr[3].join(""),
+                          arr[3].join("")
+                        )}
+                      </p>
+                      <button
+                       id="quantity_gallery_block"
+                        onClick={() => {
+                          if (
+                            getOccurrence(
+                              quantities,
+                              arr[3].join(""),
+                              arr[3].join("")
+                            ) >= 2
+                          ) {
+                            removeQuantity(
+                              arr[3].join("") +
+                                parseInt(
+                                  getOccurrence(
+                                    quantities,
+                                    arr[3].join(""),
+                                    arr[3].join("")
+                                  ) - 1
+                                ),
+                              quantities[quantities.length - 1].charAt(
+                                quantities[quantities.length - 1].length - 1
+                              )
+                            );
+                          } else {
+                            if (orders.length >= 2) {
+                              removeItem(index);
+                            } else {
+                              emptyCart();
+                            }
+                          }
+                        }}
+                        className="add_quantity_btn"
+                      >
+                        -
+                      </button>
+                    </div>
+                    <div className="cart_overlay_img">
+                      <img src={item.gallery[0]} alt={item.name} />
+                    </div>
                   </div>
                 </div>
               </div>
             );
           });
         })}
-        <div className="button_block">
+        
+        {orders.length > 0 &&<div className="total_price">
+        <h4>Total: ${total.toFixed(2)}</h4>
+        </div>}
+        {orders.length > 0 ? <div className="button_block">
           <Link to={"/cart"}>
             <button className="viev_bag_btn">Viev bag</button>
           </Link>
-
           <button className="check_out_btn">Check out</button>
-        </div>
+        </div> : <h4 className="empty_cart">Your cart is empty</h4>}
       </div>
     );
   }

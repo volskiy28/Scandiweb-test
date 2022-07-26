@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import ImageSlider from "../components/ImageSlider";
+import { getOccurrence } from "..//utils/utilFunc";
 export default class Cart extends Component {
+  showInfo() {
+    console.log("ckick");
+  }
   convertAllHexToSwatch() {
     const productColor = document.querySelectorAll(".product-color");
     productColor.forEach((child) => {
@@ -14,7 +18,6 @@ export default class Cart extends Component {
       });
     });
   }
-
   componentDidMount() {
     try {
       this.convertAllHexToSwatch();
@@ -22,20 +25,31 @@ export default class Cart extends Component {
   }
 
   render() {
-    const { orders, currency } = this.props;
-    let total = 0;
+    const {
+      orders,
+      currency,
+      addQuantity,
+      quantities,
+      removeQuantity,
+      emptyCart,
+      removeItem,
+    } = this.props;
+    let s = [];
     orders.map((arr) => {
       return arr[0].map((item) => {
-        total += item.prices[currency].amount;
-        return total;
+        return s.push(
+          item.prices[currency].amount *
+            getOccurrence(quantities, arr[3].join(""), arr[3].join(""))
+        );
       });
     });
-    let tax = 0.21 * total;
+    let total = s.reduce((a, b) => a + b, 0);
+    let tax = (21 / 100) * total;
     return (
       <div>
         <h2 className="cart_title">Cart</h2>
         {orders.length > 0 &&
-          orders.map((arr) => {
+          orders.map((arr, index) => {
             return arr[0].map((item) => {
               return (
                 <div className="order_item">
@@ -106,9 +120,62 @@ export default class Cart extends Component {
                   </div>
                   <div className="quantity_img_block">
                     <div className="cart_quantity_block">
-                      <button className="add_quantity_btn">+</button>
-                      <p>1</p>
-                      <button className="add_quantity_btn">-</button>
+                      <button
+                        onClick={() => {
+                          addQuantity(
+                            arr[3].join("") +
+                              getOccurrence(
+                                quantities,
+                                arr[3].join(""),
+                                arr[3].join("")
+                              )
+                          );
+                        }}
+                        className="add_quantity_btn"
+                      >
+                        +
+                      </button>
+                      <p>
+                        {getOccurrence(
+                          quantities,
+                          arr[3].join(""),
+                          arr[3].join("")
+                        )}
+                      </p>
+                      <button
+                        onClick={() => {
+                          if (
+                            getOccurrence(
+                              quantities,
+                              arr[3].join(""),
+                              arr[3].join("")
+                            ) >= 2
+                          ) {
+                            removeQuantity(
+                              arr[3].join("") +
+                                parseInt(
+                                  getOccurrence(
+                                    quantities,
+                                    arr[3].join(""),
+                                    arr[3].join("")
+                                  ) - 1
+                                ),
+                              quantities[quantities.length - 1].charAt(
+                                quantities[quantities.length - 1].length - 1
+                              )
+                            );
+                          } else {
+                            if (orders.length >= 2) {
+                              removeItem(index);
+                            } else {
+                              emptyCart();
+                            }
+                          }
+                        }}
+                        className="add_quantity_btn"
+                      >
+                        -
+                      </button>
                     </div>
                     <ImageSlider
                       length={item.gallery.length}
@@ -122,9 +189,9 @@ export default class Cart extends Component {
           })}
         {orders.length > 0 ? (
           <div className="total_price_block">
-            <h4>Tax 21%: {tax.toFixed(2)}</h4>
-            <h4>Quantity: </h4>
-            <h4>Total: {total.toFixed(2)}</h4>
+            <h4>Tax 21%: ${tax.toFixed(2)}</h4>
+            <h4>Quantity: {orders.length + quantities.length} </h4>
+            <h4>Total: ${total.toFixed(2)}</h4>
             <button className="order_button">Order</button>
           </div>
         ) : (

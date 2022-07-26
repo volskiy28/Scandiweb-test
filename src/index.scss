@@ -19,7 +19,13 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-family: "Raleway", sans-serif;
 }
-
+body::-webkit-scrollbar {
+  width: 0px;
+}
+.disable_scroll {
+  height: 100%;
+  overflow: hidden;
+}
 .container {
   margin: 0 auto;
   width: 1240px;
@@ -30,9 +36,9 @@ body {
   justify-content: space-between;
   align-items: center;
   padding-top: 20px;
-  position: sticky;
   top: 0;
   z-index: 2;
+  position: relative;
   height: 80px;
   background-color: #fff;
   width: 100%;
@@ -347,7 +353,7 @@ a {
 .cart_overlay img {
   height: 100%;
   width: 125px;
-  object-fit: cover;
+  object-fit: contain;
   display: flex;
   justify-content: flex-end;
 }
@@ -399,11 +405,18 @@ a {
   width: 21.8px;
   background-color: #fff;
 }
+.quantity_gallery_block {
+  display: flex;
+  gap: 10px;
+}
+.total_price {
+  margin-top: 130px;
+}
 .button_block {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  margin-top: 100px;
+  margin-top: 15px;
 }
 .button_block a {
   width: 48%;
@@ -429,6 +442,10 @@ a {
   justify-content: center;
   align-items: center;
   height: 43px;
+}
+.empty_cart {
+  margin-top: 50px;
+  margin-bottom: 50px;
 }
 
 //CART PAGE
@@ -475,11 +492,20 @@ a {
   height: 52px;
   transition: 0.2s ease;
 }
-.total_price_block{
+.total_price_block {
   margin-top: 30px;
 }
 
 //DROPDOWN
+.select {
+  display: flex;
+  text-decoration: none;
+  border: none;
+  position: relative;
+  right: 50px;
+  font-size: 16px;
+  top: 23px;
+}
 
 .dropdown {
   position: absolute;

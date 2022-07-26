@@ -1,6 +1,7 @@
 import { Query } from "@apollo/react-components";
 import React, { Component } from "react";
 import { productRequest } from "../query/getQueries";
+import { getOccurrence } from "..//utils/utilFunc";
 import {
   convertHexToSwatch,
   getSelectedAtr,
@@ -53,8 +54,8 @@ export default class Pdp extends Component {
 
   render() {
     const { productId } = this.state;
-    const { currency, onAdd, itemNames } = this.props;
-
+    const { currency, onAdd, itemNames, quantities, addQuantity } = this.props;
+    const parse = require("html-react-parser");
     return (
       <Query query={productRequest(productId)}>
         {({ loading, data }) => {
@@ -62,7 +63,7 @@ export default class Pdp extends Component {
             return <div>loading</div>;
           }
           const { product } = data;
-          const parse = require("html-react-parser");
+          
           return (
             <div
               className="PDP"
@@ -146,57 +147,67 @@ export default class Pdp extends Component {
                       {product.inStock ? (
                         <button
                           onClick={() => {
-                            let allAttributes = document.querySelectorAll(
-                              ".product-attributes"
-                            );
-                            let colorAttributes =
-                              document.querySelectorAll(".product-color");
+                          let allAttributes = document.querySelectorAll(
+                            ".product-attributes"
+                          );
+                          let colorAttributes =
+                            document.querySelectorAll(".product-color");
 
+                          if (
+                            getSelectedAtr().length !== allAttributes.length ||
+                            getSelectedCol().length !== colorAttributes.length
+                          ) {
+                            alert("Please select product attributes");
+                          } else {
                             if (
-                              getSelectedAtr().length !==
-                                allAttributes.length ||
-                              getSelectedCol().length !== colorAttributes.length
+                              !itemNames.includes(
+                                product.name +
+                                  getSelectedAtr()
+                                    .map((val) => val.value)
+                                    .join("") +
+                                  getSelectedCol()
+                                    .map((val) => val.value)
+                                    .join("")
+                              )
                             ) {
-                              alert("Please select product attributes");
-                            } else {
-                              if (
-                                !itemNames.includes(
-                                  product.name +
-                                    getSelectedAtr()
-                                      .map((val) => val.value)
-                                      .join("") +
-                                    getSelectedCol()
-                                      .map((val) => val.value)
-                                      .join("")
-                                )
-                              ) {
-                                onAdd(
+                              onAdd(
+                                [
+                                  [product],
+                                  [getSelectedAtr()],
+                                  [getSelectedCol()],
                                   [
-                                    [product],
-                                    [getSelectedAtr()],
-                                    [getSelectedCol()],
-                                    [
-                                      product.name +
-                                        getSelectedAtr()
-                                          .map((val) => val.value)
-                                          .join("") +
-                                        getSelectedCol()
-                                          .map((val) => val.value)
-                                          .join(""),
-                                    ],
+                                    product.name +
+                                      getSelectedAtr()
+                                        .map((val) => val.value)
+                                        .join("") +
+                                      getSelectedCol()
+                                        .map((val) => val.value)
+                                        .join(""),
                                   ],
+                                ],
 
-                                  product.name +
-                                    getSelectedAtr()
-                                      .map((val) => val.value)
-                                      .join("") +
-                                    getSelectedCol()
-                                      .map((val) => val.value)
-                                      .join("")
-                                );
-                              }
+                                product.name +
+                                  getSelectedAtr()
+                                    .map((val) => val.value)
+                                    .join("") +
+                                  getSelectedCol()
+                                    .map((val) => val.value)
+                                    .join("")
+                              );
+                            } else {
+                              addQuantity(
+                                product.name +
+                                  getSelectedAtr()
+                                    .map((val) => val.value)
+                                    .join("") +
+                                  getSelectedCol()
+                                    .map((val) => val.value)
+                                    .join("") +
+                                  getOccurrence(quantities, product.name)
+                              );
                             }
-                          }}
+                          }
+                        }}
                           className="add_to_cart_btn"
                         >
                           Add to cart

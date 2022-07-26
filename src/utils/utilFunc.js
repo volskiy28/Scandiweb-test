@@ -33,6 +33,14 @@
   
     return arr;
   };
+  const getOccurrence = (array, productName) => {
+    let count = 1;
   
-  export { convertHexToSwatch, getSelectedAtr, getSelectedCol };
+    array.forEach((v) => {
+      return v.slice(0, productName.length) === productName && count++;
+    });
+    return count;
+  };
+  
+  export { convertHexToSwatch, getSelectedAtr, getSelectedCol, getOccurrence };
   
