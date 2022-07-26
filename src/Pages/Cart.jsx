@@ -1,6 +1,8 @@
 import React, { Component } from "react";
+import { Query } from "@apollo/react-components";
 import ImageSlider from "../components/ImageSlider";
 import { getOccurrence } from "..//utils/utilFunc";
+import { getAllCategories } from "../query/getQueries";
 export default class Cart extends Component {
   showInfo() {
     console.log("ckick");
@@ -187,16 +189,28 @@ export default class Cart extends Component {
               );
             });
           })}
-        {orders.length > 0 ? (
-          <div className="total_price_block">
-            <h4>Tax 21%: ${tax.toFixed(2)}</h4>
-            <h4>Quantity: {orders.length + quantities.length} </h4>
-            <h4>Total: ${total.toFixed(2)}</h4>
-            <button className="order_button">Order</button>
-          </div>
-        ) : (
-          <p>Your cart is empty</p>
-        )}
+        <Query query={getAllCategories}>
+          {({ loading, data }) => {
+            if (loading) {
+              return <div>loading</div>;
+            }
+            const { currencies } = data;
+            return (
+              <div>
+                {orders.length > 0 ? (
+                  <div className="total_price_block">
+                    <h4>Tax 21%: {currencies[currency].symbol}{tax.toFixed(2)}</h4>
+                    <h4>Quantity: {orders.length + quantities.length} </h4>
+                    <h4>Total: {currencies[currency].symbol}{total.toFixed(2)}</h4>
+                    <button className="order_button">Order</button>
+                  </div>
+                ) : (
+                  <p>Your cart is empty</p>
+                )}
+              </div>
+            );
+          }}
+        </Query>
       </div>
     );
   }

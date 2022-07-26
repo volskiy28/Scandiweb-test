@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-import cartImg from "../assets/Common.svg"
+import cartImg from "../assets/Common.svg";
+import { getOccurrence } from "..//utils/utilFunc";
 
 class Card extends Component {
   displayInStock = () => {
@@ -17,6 +18,7 @@ class Card extends Component {
     this.displayInStock();
   }
   render() {
+    const { onAdd, item, itemNames, quantities, addQuantity } = this.props;
     return (
       <div data-in-stock={this.props.inStock} className="card">
         <img
@@ -26,13 +28,27 @@ class Card extends Component {
           className="card-img"
           alt="card_img"
         />
-       <div className="title_price">
-       <span>{this.props.name}</span>
-        <b>{this.props.price}</b>
+        <div className="title_price">
+          <span>{this.props.name}</span>
+          <b>{this.props.price}</b>
         </div>
-        <div
-        >
+        <div onClick={(e) => e.preventDefault()}>
           <img
+            onClick={() => {
+              if (item.attributes.length === 0) {
+                if (!itemNames.includes(item.name)) {
+                  onAdd(
+                    [[item], [item.attributes], [], [item.name]],
+
+                    item.name
+                  );
+                } else {
+                  addQuantity(item.name + getOccurrence(quantities, item.name));
+                }
+              } else {
+                alert("This product has attributes");
+              }
+            }}
             width={52}
             height={52}
             src={cartImg}

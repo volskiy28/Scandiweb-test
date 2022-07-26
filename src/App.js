@@ -8,33 +8,6 @@ import { Query } from "@apollo/react-components";
 import { getAllCategories } from "./query/getQueries";
 import Cart from "./Pages/Cart";
 
-class Currency extends Component {
-  constructor(props) {
-    super(props);
-  }
-  render() {
-    return (
-      <div>
-        <Query query={getAllCategories}>
-          {({ loading, data }) => {
-            if (loading) {
-              return <div>loading</div>;
-            }
-            const { currencies } = data;
-            return (
-              <select onChange={this.props.selectCurrency} id="select" className="select">
-               {currencies.map((s) =>{
-               return <option value={s.symbol} className="option">{s.symbol}</option>
-               })}
-              </select>
-            );
-          }}
-        </Query>
-      </div>
-    );
-  }
-}
-
 class App extends Component {
   constructor(props) {
     super(props);
@@ -102,8 +75,11 @@ class App extends Component {
                       element={
                         <Home
                           onAdd={this.addToOrder}
+                          itemNames = {itemNames}
+                          addQuantity={this.addQuantity}
                           categoryName={categories[0].name}
                           currency={currencyKey}
+                          quantities={quantities}
                         />
                       }
                     />
@@ -194,4 +170,4 @@ class App extends Component {
   };
 }
 
-export { App, Currency };
+export { App };

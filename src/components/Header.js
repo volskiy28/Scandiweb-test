@@ -5,7 +5,7 @@ import { getAllProducts } from "../query/getQueries";
 import { getAllCategories } from "../query/getQueries";
 import { graphql } from "@apollo/client/react/hoc";
 import CartOverlay from "./CartOverlay";
-import { Currency } from "../App";
+import { Dropdown } from "./Dropdown";
 import logo from "../assets/a-logo.svg";
 
 
@@ -14,26 +14,7 @@ class Header extends Component {
     super(props);
     this.state = {
       cartOpen: false,
-      currencyKey: 0,
     };
-  }
-  displayCurrencySymbols() {
-    const data = this.props.data;
-
-    if (data.loading) {
-      return ["Loading"];
-    }
-    return data.currencies.map((currency) => {
-      const currencyISO = {
-        "$": "USD",
-        "£": "GBP",
-        "A$": "AUD",
-        "¥": "JPY",
-        "₽": "RUB",
-      };
-
-      return currency.symbol + " " + currencyISO[currency.symbol];
-    });
   }
   componentDidMount() {
     let target = document.body;
@@ -85,7 +66,7 @@ class Header extends Component {
                   <img src={logo} alt="logo" width={40} height={40} />
                 </div>
                 <div className="currency">
-                  <Currency selectCurrency = {this.props.selectCurrency}/>
+                  <Dropdown selectCurrency = {this.props.selectCurrency}/>
                   <button
                     onClick={() => {
                       this.setState({ cartOpen: !cartOpen });

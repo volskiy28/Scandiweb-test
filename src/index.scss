@@ -286,9 +286,9 @@ a {
 }
 .cart_items_counter {
   position: absolute;
-  top: 10px;
+  top: 20px;
   z-index: 2;
-  right: -8px;
+  right: 0px;
   clip-path: circle(50% at 50% 50%);
   background-color: #1d1f22;
   width: 20px;
@@ -410,7 +410,7 @@ a {
   gap: 10px;
 }
 .total_price {
-  margin-top: 130px;
+  margin-top: 100px;
 }
 .button_block {
   display: flex;
