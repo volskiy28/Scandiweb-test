@@ -1,64 +1,83 @@
 import React, { Component } from "react";
 import cartImg from "../assets/Common.svg";
-import { getOccurrence } from "..//utils/utilFunc";
+import { connect } from "react-redux";
+import { addProductToCart } from "../Redux/shop/actions";
 
 class Card extends Component {
-  displayInStock = () => {
-    const cards = document.querySelectorAll(".card");
-
-    cards.forEach((card) => {
-      if (card.getAttribute("data-in-stock") === "false") {
-        card.classList.add("nostock");
-      } else {
-        card.classList.remove("nostock");
-      }
-    });
+  addToCart = (product) => {
+    let updatedProduct = {};
+    if (product.attributes.length === 0) {
+      updatedProduct = {
+        ...product,
+        qty: 1,
+        id: `${product.id} `,
+      };
+      this.props.addProductToCart(updatedProduct);
+    } else {
+      const updatedAttributes = product.attributes.map((a) => {
+        return {
+          ...a,
+          items: a.items.map((item, index) => {
+            return index === 0
+              ? { ...item, selected: true }
+              : { ...item, selected: false };
+          }),
+        };
+      });
+      const selectedAttribute = updatedAttributes.map((a) =>
+        a.items.find((i) => i.selected === true)
+      );
+      updatedProduct = {
+        ...product,
+        attributes: updatedAttributes,
+        qty: 1,
+        id: `${product.id} ${selectedAttribute.map((i) => i.id).join(" ")}`,
+      };
+      this.props.addProductToCart(updatedProduct);
+    }
   };
-  componentDidMount() {
-    this.displayInStock();
-  }
   render() {
-    const { onAdd, item, itemNames, quantities, addQuantity } = this.props;
+    const { item, price } = this.props;
     return (
-      <div data-in-stock={this.props.inStock} className="card">
+      <div className={`card ${!item.inStock && "nostock"}`}>
         <img
-          src={this.props.source}
+          src={item.gallery[0]}
           width={354}
           height={330}
           className="card-img"
           alt="card_img"
         />
         <div className="title_price">
-          <span>{this.props.name}</span>
-          <b>{this.props.price}</b>
+          <span>{item.name}</span>
+          <b>{price}</b>
         </div>
-        <div onClick={(e) => e.preventDefault()}>
-          <img
-            onClick={() => {
-              if (item.attributes.length === 0) {
-                if (!itemNames.includes(item.name)) {
-                  onAdd(
-                    [[item], [item.attributes], [], [item.name]],
-
-                    item.name
-                  );
-                } else {
-                  addQuantity(item.name + getOccurrence(quantities, item.name));
-                }
-              } else {
-                alert("This product has attributes");
-              }
-            }}
-            width={52}
-            height={52}
-            src={cartImg}
-            alt="item_img"
-            className="add_to_cart"
-          />
-        </div>
+        {item.inStock && (
+          <div className="div" onClick={(e) => e.preventDefault()}>
+            <img
+              onClick={() => this.addToCart(item)}
+              width={52}
+              height={52}
+              src={cartImg}
+              alt="item_img"
+              className="add_to_cart"
+            />
+          </div>
+        )}
       </div>
     );
   }
 }
 
-export default Card;
+const mapStateToProps = (state) => {
+  return {
+    cart: state.shop.cart,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  addProductToCart: (product) => dispatch(addProductToCart(product)),
+});
+
+const functionFromConnect = connect(mapStateToProps, mapDispatchToProps);
+
+export default functionFromConnect(Card);

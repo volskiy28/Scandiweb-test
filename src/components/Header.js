@@ -2,11 +2,11 @@ import { Query } from "@apollo/react-components";
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 import { getAllProducts } from "../query/getQueries";
-import { getAllCategories } from "../query/getQueries";
-import { graphql } from "@apollo/client/react/hoc";
 import CartOverlay from "./CartOverlay";
 import { Dropdown } from "./Dropdown";
+import { connect } from "react-redux";
 import logo from "../assets/a-logo.svg";
+
 
 
 class Header extends Component {
@@ -27,16 +27,31 @@ class Header extends Component {
       }
     });
   }
+  displayCurrencySymbols() {
+    const data = this.props.data;
+
+    if (data.loading) {
+      return ['Loading'];
+    } else {
+      return data.currencies.map((currency) => {
+        const currencyISO = {
+          $: 'USD',
+          '£': 'GBP',
+          A$: 'AUD',
+          '¥': 'JPY',
+          '₽': 'RUB',
+        };
+
+        return currency.symbol + ' ' + currencyISO[currency.symbol];
+      });
+    }
+  }
   render() {
     const { cartOpen } = this.state;
     const {
-      orders,
       currency,
-      addQuantity,
-      quantities,
-      removeQuantity,
-      emptyCart,
-      removeItem,
+      cart,
+      totalQty
     } = this.props;
     return (
       <Query query={getAllProducts}>
@@ -66,7 +81,9 @@ class Header extends Component {
                   <img src={logo} alt="logo" width={40} height={40} />
                 </div>
                 <div className="currency">
-                  <Dropdown selectCurrency = {this.props.selectCurrency}/>
+                  <Dropdown selectCurrency = {this.props.selectCurrency}
+                    currencyList={this.displayCurrencySymbols()}
+                  />
                   <button
                     onClick={() => {
                       this.setState({ cartOpen: !cartOpen });
@@ -81,20 +98,14 @@ class Header extends Component {
                       src={require("../assets/cart.png")}
                     />
                   </button>
-                  {orders.length > 0 && (
-                    <p className="cart_items_counter"> {orders.length + quantities.length}</p>
+                  {cart.length > 0 && (
+                    <p className="cart_items_counter"> {totalQty}</p>
                   )}
                   {cartOpen && (
                     <div className="cart_overlay_bag">
                       <div className="sidebar show-cart">
                         <CartOverlay
                           currency={currency}
-                          orders={orders}
-                          quantities={quantities}
-                          addQuantity={addQuantity}
-                          removeQuantity={removeQuantity}
-                          emptyCart={emptyCart}
-                          removeItem={removeItem}
                         />
                       </div>
                     </div>
@@ -109,4 +120,13 @@ class Header extends Component {
   }
 }
 
-export default graphql(getAllCategories)(Header);
+const mapStateToProps = (state) => {
+  return {
+    cart: state.shop.cart,
+    totalQty: state.shop.totalQty,
+  };
+};
+
+const functionFromConnect = connect(mapStateToProps, null);
+
+export default functionFromConnect(Header);

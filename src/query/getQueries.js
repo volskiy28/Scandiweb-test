@@ -1,4 +1,4 @@
-import { gql } from '@apollo/client';
+import { gql } from "@apollo/client";
 
 const getAllProducts = gql`
   query {
@@ -53,9 +53,6 @@ query {
   category (input: {title: "${category}"}) {
     products {
           id
-          attributes {
-            name
-          }
           name
           inStock
           gallery
@@ -84,32 +81,34 @@ query {
           
 `;
 
-const productRequest = (productID) => gql`
-query {
-  product(id: "${productID}") {
-    name
-    inStock
-    gallery
-    description
-    category
-    attributes {
-      
+const productRequest = gql`
+  query product($id: String!) {
+    product(id: $id) {
+      id
       name
-      items {
+      inStock
+      gallery
+      description
+      attributes {
         id
-        value
-        displayValue
+        name
+        type
+        items {
+          id
+          displayValue
+          value
+        }
       }
-    }
-    prices {
-      amount
-      currency {
-        symbol
+      prices {
+        currency {
+          label
+          symbol
+        }
+        amount
       }
+      brand
     }
-    brand
   }
-}
 `;
 
 export { getAllProducts, getAllCategories, productRequest, categoryRequest };

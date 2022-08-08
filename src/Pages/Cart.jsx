@@ -1,217 +1,172 @@
-import React, { Component } from "react";
-import { Query } from "@apollo/react-components";
+import React, { PureComponent } from "react";
+import { connect } from "react-redux";
 import ImageSlider from "../components/ImageSlider";
-import { getOccurrence } from "..//utils/utilFunc";
-import { getAllCategories } from "../query/getQueries";
-export default class Cart extends Component {
-  showInfo() {
-    console.log("ckick");
-  }
-  convertAllHexToSwatch() {
-    const productColor = document.querySelectorAll(".product-color");
-    productColor.forEach((child) => {
-      const gChild = child.childNodes;
-      gChild.forEach((col) => {
-        col.style.backgroundColor = col.getAttribute("value");
-
-        if (col.getAttribute("value") === "#FFFFFF") {
-          col.classList.add("color-visibility");
-        }
-      });
-    });
-  }
-  componentDidMount() {
-    try {
-      this.convertAllHexToSwatch();
-    } catch (error) {}
-  }
-
+import {
+  addProductToCart,
+  removeProductFromCart,
+  checkout,
+} from "../Redux/shop/actions";
+class Cart extends PureComponent {
+  addItem = (product) => {
+    this.props.addProductToCart(product);
+  };
+  deleteItem = (product) => {
+    this.props.removeProductFromCart(product);
+  };
   render() {
-    const {
-      orders,
-      currency,
-      addQuantity,
-      quantities,
-      removeQuantity,
-      emptyCart,
-      removeItem,
-    } = this.props;
+    const cart = this.props.cart;
+    const { currency, totalQty } = this.props;
+    console.log(cart);
     let s = [];
-    orders.map((arr) => {
-      return arr[0].map((item) => {
-        return s.push(
-          item.prices[currency].amount *
-            getOccurrence(quantities, arr[3].join(""), arr[3].join(""))
-        );
-      });
+    cart.map((item) => {
+      return s.push(item.prices[currency].amount * item.qty);
     });
     let total = s.reduce((a, b) => a + b, 0);
-    let tax = (21 / 100) * total;
+    let tax = total * 0.21;
     return (
-      <div>
-        <h2 className="cart_title">Cart</h2>
-        {orders.length > 0 &&
-          orders.map((arr, index) => {
-            return arr[0].map((item) => {
+      <div className="cart_component">
+        <h1 className="cart_title">Cart</h1>
+        <div className="grey-line">
+          <hr width="auto" color="#E5E5E5" size="1" />
+        </div>
+        <div></div>
+        {cart.length === 0 ? (
+          <p className="empty">Cart Is Empty</p>
+        ) : (
+          <div>
+            {cart.map((item, index) => {
               return (
-                <div className="order_item">
-                  <div>
-                    <h3>{item.brand}</h3>
-                    <p>{item.name}</p>
-                    <p>
-                      {item.prices[currency].currency.symbol +
-                        item.prices[currency].amount}
-                    </p>
-                    {item.attributes.map((atr, index) => {
-                      if (atr.name !== "Color") {
-                        return (
-                          <div className="attributes-section attributes-section-product-page">
-                            <p className="attribute-name">{atr.name}:</p>
-                            <ul className="product-attributes product-attributes-cart-page">
-                              {atr.items.map((atr2, index2) => {
-                                return (
-                                  <li
-                                    className={
-                                      arr[1][0].find((el) => {
-                                        return el.value === atr2.value;
-                                      }) &&
-                                      arr[1][0].find(
-                                        (ind) => ind.id === `${index}${index2}`
-                                      )
-                                        ? "attribute-selected"
-                                        : ""
-                                    }
-                                    value={atr2.value}
-                                    data-index={`${index}${index2}`}
-                                  >
-                                    {atr2.value}
-                                  </li>
-                                );
-                              })}
-                            </ul>
+                <div key={item.id}>
+                  <div className="cart_item">
+                    <div>
+                      <div className="details_of_item">
+                        <h2 className="product__name">{item.name}</h2>
+                        <p className="product__brand">{item.brand}</p>
+                        <div className="price">
+                          {item.prices[currency].currency.symbol}
+                          {item.prices[currency].amount}
+                        </div>
+                      </div>
+
+                      <div className="attribute_section">
+                        {item.attributes.map((att) => (
+                          <div
+                            className="attributes"
+                            key={`${item.id} ${att.name}`}
+                          >
+                            <p className="cart-item__attributes-title attributes__title title">{`${att.name}:`}</p>
+                            <div className="attributes__list">
+                              {att.items.map((item) => (
+                                <div key={item.id}>
+                                  <input
+                                    type="radio"
+                                    id={`${att.id} ${item.id}`}
+                                    name={att.name + index}
+                                    value={item.value}
+                                    defaultChecked={item.selected}
+                                  />
+                                  <label>
+                                    <div
+                                      className={
+                                        att.type !== "swatch"
+                                          ? "attributes__text cart-item__attributes-text_" +
+                                            item.selected
+                                          : "attributes__color cart-item__attributes-color_" +
+                                            item.selected
+                                      }
+                                      style={
+                                        att.type === "swatch"
+                                          ? {
+                                              background: item.value,
+                                              border: `1px solid ${
+                                                item.id === "White"
+                                                  ? "black"
+                                                  : item.value
+                                              }`,
+                                            }
+                                          : null
+                                      }
+                                    >
+                                      {att.type === "swatch" ? "" : item.value}
+                                    </div>
+                                  </label>
+                                </div>
+                              ))}
+                            </div>
                           </div>
-                        );
-                      } else {
-                        return (
-                          <div className="attributes-section attributes-section-product-page">
-                            <p className="attribute-name">{atr.name}:</p>
-                            <ul className="product-color product-color-cart-page">
-                              {atr.items.map((atr2, index2) => {
-                                return (
-                                  <li
-                                    className={
-                                      arr[2][0].find(
-                                        (el) => el.value === atr2.value
-                                      ) &&
-                                      arr[2][0].find(
-                                        (ind) => ind.id === `${index}${index2}`
-                                      )
-                                        ? "color-selected"
-                                        : ""
-                                    }
-                                    value={atr2.value}
-                                    data-index={`${index}${index2}`}
-                                  ></li>
-                                );
-                              })}
-                            </ul>
-                          </div>
-                        );
-                      }
-                    })}
-                  </div>
-                  <div className="quantity_img_block">
-                    <div className="cart_quantity_block">
-                      <button
-                        onClick={() => {
-                          addQuantity(
-                            arr[3].join("") +
-                              getOccurrence(
-                                quantities,
-                                arr[3].join(""),
-                                arr[3].join("")
-                              )
-                          );
-                        }}
-                        className="add_quantity_btn"
-                      >
-                        +
-                      </button>
-                      <p>
-                        {getOccurrence(
-                          quantities,
-                          arr[3].join(""),
-                          arr[3].join("")
-                        )}
-                      </p>
-                      <button
-                        onClick={() => {
-                          if (
-                            getOccurrence(
-                              quantities,
-                              arr[3].join(""),
-                              arr[3].join("")
-                            ) >= 2
-                          ) {
-                            removeQuantity(
-                              arr[3].join("") +
-                                parseInt(
-                                  getOccurrence(
-                                    quantities,
-                                    arr[3].join(""),
-                                    arr[3].join("")
-                                  ) - 1
-                                ),
-                              quantities[quantities.length - 1].charAt(
-                                quantities[quantities.length - 1].length - 1
-                              )
-                            );
-                          } else {
-                            if (orders.length >= 2) {
-                              removeItem(index);
-                            } else {
-                              emptyCart();
-                            }
-                          }
-                        }}
-                        className="add_quantity_btn"
-                      >
-                        -
-                      </button>
+                        ))}
+                      </div>
                     </div>
-                    <ImageSlider
-                      length={item.gallery.length}
-                      imgGallery={item.gallery}
-                      imgAlt={item.name}
-                    />
+                    <div className="images_of_item">
+                      <div className="activity">
+                        <button
+                          onClick={() => {
+                            this.addItem(item);
+                          }}
+                          className="activity_button"
+                        >
+                          +
+                        </button>
+
+                        <div className="qty">
+                          <span>{item.qty}</span>
+                        </div>
+
+                        <button
+                          className="activity_button"
+                          onClick={() => {
+                            this.deleteItem(item);
+                          }}
+                        >
+                          -
+                        </button>
+                      </div>
+                      <div className="image_slider">
+                        <ImageSlider
+                          length={item.gallery.length}
+                          imgGallery={item.gallery}
+                          imgAlt={item.name}
+                        />
+                      </div>
+                    </div>
                   </div>
+
+                  <hr width="auto" color="#E5E5E5" size="1" />
                 </div>
               );
-            });
-          })}
-        <Query query={getAllCategories}>
-          {({ loading, data }) => {
-            if (loading) {
-              return <div>loading</div>;
-            }
-            const { currencies } = data;
-            return (
-              <div>
-                {orders.length > 0 ? (
-                  <div className="total_price_block">
-                    <h4>Tax 21%: {currencies[currency].symbol}{tax.toFixed(2)}</h4>
-                    <h4>Quantity: {orders.length + quantities.length} </h4>
-                    <h4>Total: {currencies[currency].symbol}{total.toFixed(2)}</h4>
-                    <button className="order_button">Order</button>
-                  </div>
-                ) : (
-                  <p>Your cart is empty</p>
-                )}
-              </div>
-            );
-          }}
-        </Query>
+            })}
+            <div className="total_price_block">
+              <h4>
+                Tax 21%: {cart[0].prices[currency].currency.symbol}
+                {tax.toFixed(2)}
+              </h4>
+              <h4>Quantity: {totalQty} </h4>
+              <h4>
+                Total:
+                {cart[0].prices[currency].currency.symbol}
+                {total.toFixed(2)}
+              </h4>
+              <button className="order_button">Order</button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
 }
+const mapStateToProps = (state) => {
+  return {
+    cart: state.shop.cart,
+    totalQty: state.shop.totalQty,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => ({
+  removeProductFromCart: (product) => dispatch(removeProductFromCart(product)),
+  addProductToCart: (product) => dispatch(addProductToCart(product)),
+  checkout: () => dispatch(checkout()),
+});
+
+const functionFromConnect = connect(mapStateToProps, mapDispatchToProps);
+
+export default functionFromConnect(Cart);

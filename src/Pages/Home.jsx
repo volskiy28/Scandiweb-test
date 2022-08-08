@@ -6,7 +6,7 @@ import { categoryRequest } from "../query/getQueries";
 
 class Home extends Component {
   render() {
-    const { categoryName, addQuantity, quantities, itemNames } = this.props;
+    const { categoryName } = this.props;
     return (
       <div>
         <Query query={categoryRequest(categoryName)}>
@@ -15,7 +15,7 @@ class Home extends Component {
               return <div>loading</div>;
             }
             const { category } = data;
-            const {currency, onAdd} = this.props
+            const { currency } = this.props;
             return (
               <div>
                 <div className="container">
@@ -29,19 +29,11 @@ class Home extends Component {
                       <Link to={`/product/${product.id}`}>
                         <Card
                           key={product.id}
-                          onAdd={onAdd}
                           item={product}
-                          inStock={product.inStock}
-                          source={product.gallery[0]}
-                          name={`${product.brand} ${product.name}`}
                           price={
                             product.prices[currency].currency.symbol +
                             product.prices[currency].amount
                           }
-                          addQuantity = {addQuantity}
-                          quantities = {quantities}
-                          itemNames = {itemNames}
-                          
                         />
                       </Link>
                     );

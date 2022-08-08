@@ -12,34 +12,12 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      orders: [],
       currencyKey: 0,
-      itemNames: [],
-      quantities: [],
     };
-    this.addToOrder = this.addToOrder.bind(this);
     this.selectCurrency = this.selectCurrency.bind(this);
   }
-  selectCurrency() {
-    const select = document.querySelector("#select");
-    if (select.value === "$") {
-      console.log("$");
-      this.setState({ currencyKey: 0 });
-    }
-    if (select.value === "£") {
-      console.log("£");
-      this.setState({ currencyKey: 1 });
-    }
-    if (select.value === "A$") {
-      console.log("A$");
-      this.setState({ currencyKey: 2 });
-    }
-    if (select.value === "¥") {
-      this.setState({ currencyKey: 3 });
-    }
-    if (select.value === "₽") {
-      this.setState({ currencyKey: 4 });
-    }
+  selectCurrency = (value) => {
+    this.setState({currencyKey: value})
   }
   render() {
     return (
@@ -51,18 +29,12 @@ class App extends Component {
                 return <div>loading</div>;
               }
               const { categories } = data;
-              const { currencyKey, orders, itemNames, quantities } = this.state;
+              const { currencyKey } = this.state;
               return (
                 <div>
                   <Header
                     currency={currencyKey}
-                    orders={orders}
                     data={data}
-                    quantities={quantities}
-                    addQuantity={this.addQuantity}
-                    removeQuantity={this.removeQuantity}
-                    emptyCart={this.emptyCart}
-                    removeItem={this.removeItem}
                     selectCurrency={this.selectCurrency}
                   />
                   <Routes>
@@ -74,61 +46,29 @@ class App extends Component {
                       path={`/${categories[0].name}`}
                       element={
                         <Home
-                          onAdd={this.addToOrder}
-                          itemNames = {itemNames}
-                          addQuantity={this.addQuantity}
                           categoryName={categories[0].name}
                           currency={currencyKey}
-                          quantities={quantities}
                         />
                       }
                     />
                     <Route
                       path={`/${categories[1].name}`}
-                      element={
-                        <Home
-                          currency={currencyKey}
-                          categoryName={categories[1].name}
-                        />
-                      }
+                      element={<Home categoryName={categories[1].name} />}
                     />
                     <Route
                       path={`/${categories[2].name}`}
-                      element={
-                        <Home
-                          currency={currencyKey}
-                          categoryName={categories[2].name}
-                        />
-                      }
+                      element={<Home categoryName={categories[2].name} />}
                     />
 
                     <Route
                       exact
                       path="/product/:productID"
-                      element={
-                        <Pdp
-                          itemNames={itemNames}
-                          onAdd={this.addToOrder}
-                          currency={currencyKey}
-                          quantities={quantities}
-                          addQuantity={this.addQuantity}
-                        />
-                      }
+                      element={<Pdp currency={currencyKey} />}
                     />
                     <Route
                       exact
                       path="/cart"
-                      element={
-                        <Cart
-                          orders={orders}
-                          currency={currencyKey}
-                          quantities={quantities}
-                          addQuantity={this.addQuantity}
-                          removeQuantity={this.removeQuantity}
-                          emptyCart={this.emptyCart}
-                          removeItem={this.removeItem}
-                        />
-                      }
+                      element={<Cart currency={currencyKey} />}
                     />
                   </Routes>
                 </div>
@@ -139,35 +79,6 @@ class App extends Component {
       </div>
     );
   }
-
-  addToOrder = (item, itemName) => {
-    this.setState((prevState) => ({
-      orders: [...prevState.orders, item],
-      itemNames: [...this.state.itemNames, itemName],
-    }));
-  };
-  addQuantity = (quantity) => {
-    this.setState({
-      quantities: [...this.state.quantities, quantity],
-    });
-  };
-  removeQuantity = (toremove) => {
-    this.setState({
-      quantities: this.state.quantities.filter((prod) => prod !== toremove),
-    });
-  };
-  emptyCart = () => {
-    this.setState({
-      orders: [],
-      itemNames: [],
-      quantities: [],
-    });
-  };
-  removeItem = (index) => {
-    this.setState({
-      orders: this.state.orders.filter((_, i) => i !== index),
-    });
-  };
 }
 
 export { App };

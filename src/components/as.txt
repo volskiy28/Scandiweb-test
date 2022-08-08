@@ -1,0 +1,37 @@
+ import React, { Component } from "react";
+ import { Query } from "@apolloreact-components";
+ import { getAllCategories } from "..querygetQueries";
+
+ export class Dropdown extends Component {
+   render() {
+     let i = -5;
+     console.log(i);
+     return (
+       <div>
+         <Query query={getAllCategories}>
+           {({ loading, data }) => {
+             if (loading) {
+               return <div>loading<div>;
+             }
+             const { currencies } = data;
+             return (
+               <ol id="select" className="select">
+                 {currencies.map((s) => {
+                   return (
+                     <li
+                       onClick={(e) => this.props.selectCurrency(e.target.value)}
+                       value={i++}
+                       className="option"
+                     >
+                       {s.symbol}
+                     <li>
+                   );
+                 })}
+               <ol>
+             );
+           }}
+         <Query>
+       <div>
+     );
+   }
+ }
