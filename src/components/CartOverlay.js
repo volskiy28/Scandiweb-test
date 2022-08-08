@@ -1,7 +1,5 @@
-import { Query } from "@apollo/react-components";
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { getAllCategories } from "../query/getQueries";
 import { connect } from "react-redux";
 import { addProductToCart, removeProductFromCart } from "../Redux/shop/actions";
 
@@ -13,16 +11,15 @@ class CartOverlay extends Component {
     this.props.removeProductFromCart(product);
   };
   render() {
-    const { currency, cart } = this.props;
+    const { currency, cart, } = this.props;
     let s = [];
     cart.map((item) => {
       return s.push(item.prices[currency].amount * item.qty);
     });
     let total = s.reduce((a, b) => a + b, 0);
     return (
-      
       <div id="cart_overlay_bag" className="cart_overlay_bag">
-        <h3 id="quantity_gallery_block">My bag</h3>
+        <h3 id="quantity_gallery_block">  My bag</h3>
         {cart.map((item, index) => {
           return (
             <div className="cart_overlay">
@@ -110,36 +107,27 @@ class CartOverlay extends Component {
             </div>
           );
         })}
-        <Query query={getAllCategories}>
-          {({ loading, data }) => {
-            if (loading) {
-              return <div>loading</div>;
-            }
-            const { currencies } = data;
-            return (
-              <div>
-                {cart.length > 0 && (
-                  <div className="total_price">
-                    <h4>
-                      Total: {currencies[currency].symbol}
-                      {total.toFixed(2)}
-                    </h4>
-                  </div>
-                )}
-                {cart.length > 0 ? (
-                <div className="button_block">
-                  <Link to={"/cart"}>
-                    <button className="viev_bag_btn">Viev bag</button>
-                  </Link>
-                  <button className="check_out_btn">Check out</button>
-                </div>
-                ) : (
-                  <h4 className="empty_cart">Your cart is empty</h4>
-                )}
-              </div>
-            );
-          }}
-        </Query>
+
+        <div>
+          {cart.length > 0 && (
+            <div className="total_price">
+              <h4>
+                Total: {cart[0].prices[currency].currency.symbol}
+                {total.toFixed(2)}
+              </h4>
+            </div>
+          )}
+          {cart.length > 0 ? (
+            <div className="button_block">
+              <Link to={"/cart"}>
+                <button className="viev_bag_btn">Viev bag</button>
+              </Link>
+              <button className="check_out_btn">Check out</button>
+            </div>
+          ) : (
+            <h4 className="empty_cart">Your cart is empty</h4>
+          )}
+        </div>
       </div>
     );
   }

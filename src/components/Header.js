@@ -7,8 +7,6 @@ import { Dropdown } from "./Dropdown";
 import { connect } from "react-redux";
 import logo from "../assets/a-logo.svg";
 
-
-
 class Header extends Component {
   constructor(props) {
     super(props);
@@ -16,43 +14,27 @@ class Header extends Component {
       cartOpen: false,
     };
   }
-  componentDidMount() {
-    let target = document.body;
-    window.addEventListener("click", (e) => {
-      if (e.target.getAttribute("id") !== "cart_overlay" && e.target.getAttribute("id") !== "quantity_gallery_block") {
-        this.setState({ cartOpen: false });
-        target.classList.remove("disable_scroll");
-      } else {
-        target.classList.add("disable_scroll");
-      }
-    });
-  }
   displayCurrencySymbols() {
     const data = this.props.data;
-
     if (data.loading) {
-      return ['Loading'];
+      return ["Loading"];
     } else {
       return data.currencies.map((currency) => {
         const currencyISO = {
-          $: 'USD',
-          '£': 'GBP',
-          A$: 'AUD',
-          '¥': 'JPY',
-          '₽': 'RUB',
+          $: "USD",
+          "£": "GBP",
+          A$: "AUD",
+          "¥": "JPY",
+          "₽": "RUB",
         };
 
-        return currency.symbol + ' ' + currencyISO[currency.symbol];
+        return currency.symbol + " " + currencyISO[currency.symbol];
       });
     }
   }
   render() {
     const { cartOpen } = this.state;
-    const {
-      currency,
-      cart,
-      totalQty
-    } = this.props;
+    const { currency, cart, totalQty } = this.props;
     return (
       <Query query={getAllProducts}>
         {({ loading, data }) => {
@@ -81,12 +63,13 @@ class Header extends Component {
                   <img src={logo} alt="logo" width={40} height={40} />
                 </div>
                 <div className="currency">
-                  <Dropdown selectCurrency = {this.props.selectCurrency}
+                  <Dropdown
+                    selectCurrency={this.props.selectCurrency}
                     currencyList={this.displayCurrencySymbols()}
                   />
                   <button
                     onClick={() => {
-                      this.setState({ cartOpen: !cartOpen });
+                      this.setState({ cartOpen: true });
                     }}
                     className="cart-button "
                   >
@@ -103,10 +86,19 @@ class Header extends Component {
                   )}
                   {cartOpen && (
                     <div className="cart_overlay_bag">
-                      <div className="sidebar show-cart">
-                        <CartOverlay
-                          currency={currency}
-                        />
+                      <div
+                        onClick={() => {
+                          this.setState({ cartOpen: false });
+                        }}
+                        className="sidebar show-cart"
+                      >
+                        <div
+                          onClick={(e) => {
+                            e.stopPropagation();
+                          }}
+                        >
+                          <CartOverlay currency={currency} />
+                        </div>
                       </div>
                     </div>
                   )}

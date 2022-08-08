@@ -16,14 +16,3 @@ export function removeProductFromCart(product) {
   };
 }
 
-export function setMiniCartIsOpen() {
-  return {
-    type: "SET_MINI-CART_IS_OPEN",
-  };
-}
-
-export function checkout() {
-  return {
-    type: "CHECKOUT",
-  };
-}

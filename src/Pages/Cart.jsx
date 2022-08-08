@@ -1,11 +1,7 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import ImageSlider from "../components/ImageSlider";
-import {
-  addProductToCart,
-  removeProductFromCart,
-  checkout,
-} from "../Redux/shop/actions";
+import { addProductToCart, removeProductFromCart } from "../Redux/shop/actions";
 class Cart extends PureComponent {
   addItem = (product) => {
     this.props.addProductToCart(product);
@@ -164,7 +160,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => ({
   removeProductFromCart: (product) => dispatch(removeProductFromCart(product)),
   addProductToCart: (product) => dispatch(addProductToCart(product)),
-  checkout: () => dispatch(checkout()),
 });
 
 const functionFromConnect = connect(mapStateToProps, mapDispatchToProps);

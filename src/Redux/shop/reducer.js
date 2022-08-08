@@ -65,8 +65,6 @@ export default function reducer(state = initialState, action) {
 
         return updatedState;
       }
-    case "CHECKOUT":
-      return { ...state, cart: [], totalQty: 0 };
     default:
       return state;
   }
