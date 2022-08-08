@@ -13,17 +13,12 @@ class App extends Component {
     super(props);
     this.state = {
       currencyKey: 0,
-      // show: false,
     };
     this.selectCurrency = this.selectCurrency.bind(this);
-    // this.toggleCart = this.toggleCart.bind(this);
   }
   selectCurrency = (value) => {
     this.setState({ currencyKey: value });
   };
-  // toggleCart = () => {
-  //   this.setState({ show: !this.state.show });
-  // };
   render() {
     return (
       <div className="App">
@@ -38,7 +33,6 @@ class App extends Component {
               return (
                 <div>
                   <Header
-                    // toggleCart={this.toggleCart}
                     currency={currencyKey}
                     data={data}
                     selectCurrency={this.selectCurrency}
