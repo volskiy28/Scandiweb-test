@@ -11,7 +11,7 @@ class CartOverlay extends Component {
     this.props.removeProductFromCart(product);
   };
   render() {
-    const { currency, cart, } = this.props;
+    const { currency, cart } = this.props;
     let s = [];
     cart.map((item) => {
       return s.push(item.prices[currency].amount * item.qty);
@@ -19,7 +19,7 @@ class CartOverlay extends Component {
     let total = s.reduce((a, b) => a + b, 0);
     return (
       <div id="cart_overlay_bag" className="cart_overlay_bag">
-        <h3 id="quantity_gallery_block">  My bag</h3>
+        <h3 id="quantity_gallery_block"> My bag</h3>
         {cart.map((item, index) => {
           return (
             <div className="cart_overlay">

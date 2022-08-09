@@ -34,6 +34,7 @@ class Card extends Component {
         id: `${product.id} ${selectedAttribute.map((i) => i.id).join(" ")}`,
       };
       this.props.addProductToCart(updatedProduct);
+      console.log(updatedAttributes);
     }
   };
   render() {

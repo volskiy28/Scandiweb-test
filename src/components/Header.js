@@ -6,15 +6,15 @@ import CartOverlay from "./CartOverlay";
 import { Dropdown } from "./Dropdown";
 import { connect } from "react-redux";
 import logo from "../assets/a-logo.svg";
-
 class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
       cartOpen: false,
     };
+    this.close = this.close.bind(this);
   }
-  displayCurrencySymbols() {
+  displayCurrencySymbols = () => {
     const data = this.props.data;
     if (data.loading) {
       return ["Loading"];
@@ -31,7 +31,10 @@ class Header extends Component {
         return currency.symbol + " " + currencyISO[currency.symbol];
       });
     }
-  }
+  };
+  close = () => {
+    this.setState({ cartOpen: false });
+  };
   render() {
     const { cartOpen } = this.state;
     const { currency, cart, totalQty } = this.props;
@@ -88,7 +91,7 @@ class Header extends Component {
                     <div className="cart_overlay_bag">
                       <div
                         onClick={() => {
-                          this.setState({ cartOpen: false });
+                          this.close();
                         }}
                         className="sidebar show-cart"
                       >
@@ -97,7 +100,7 @@ class Header extends Component {
                             e.stopPropagation();
                           }}
                         >
-                          <CartOverlay currency={currency} />
+                          <CartOverlay close={this.close} currency={currency} />
                         </div>
                       </div>
                     </div>
@@ -120,5 +123,4 @@ const mapStateToProps = (state) => {
 };
 
 const functionFromConnect = connect(mapStateToProps, null);
-
 export default functionFromConnect(Header);

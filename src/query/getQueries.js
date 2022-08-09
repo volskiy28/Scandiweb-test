@@ -80,7 +80,35 @@ query {
   }
           
 `;
-
+ const GET_PRODUCTS_BY_CATEGORY = gql`
+  query category($input: CategoryInput) {
+    category(input: $input) {
+      products {
+        id
+        brand
+        name
+        inStock
+        gallery
+        attributes {
+          id
+          name
+          type
+          items {
+            id
+            value
+            displayValue
+          }
+        }
+        prices {
+          currency {
+            symbol
+          }
+          amount
+        }
+      }
+    }
+  }
+`;
 const productRequest = gql`
   query product($id: String!) {
     product(id: $id) {
@@ -111,4 +139,4 @@ const productRequest = gql`
   }
 `;
 
-export { getAllProducts, getAllCategories, productRequest, categoryRequest };
+export { getAllProducts, getAllCategories, productRequest, categoryRequest, GET_PRODUCTS_BY_CATEGORY };

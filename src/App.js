@@ -53,11 +53,21 @@ class App extends Component {
                     />
                     <Route
                       path={`/${categories[1].name}`}
-                      element={<Home categoryName={categories[1].name} />}
+                      element={
+                        <Home
+                          categoryName={categories[1].name}
+                          currency={currencyKey}
+                        />
+                      }
                     />
                     <Route
                       path={`/${categories[2].name}`}
-                      element={<Home categoryName={categories[2].name} />}
+                      element={
+                        <Home
+                          categoryName={categories[2].name}
+                          currency={currencyKey}
+                        />
+                      }
                     />
 
                     <Route

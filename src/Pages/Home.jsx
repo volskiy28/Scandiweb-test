@@ -16,6 +16,8 @@ class Home extends Component {
             }
             const { category } = data;
             const { currency } = this.props;
+       
+            
             return (
               <div>
                 <div className="container">
