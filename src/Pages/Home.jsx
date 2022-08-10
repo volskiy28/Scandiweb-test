@@ -30,9 +30,6 @@ class Home extends Component {
             }
             const products = data.category.products;
             const { currency } = this.props;
-            products.map(p =>{
-              console.log(p)
-            })
             return (
               <div>
                 <div className="container">

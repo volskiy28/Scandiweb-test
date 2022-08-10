@@ -1,10 +1,8 @@
 import React, {  PureComponent } from 'react';
 
 class ImageSlider extends PureComponent {
-  // eslint-disable-next-line no-useless-constructor
   constructor(props) {
     super(props);
-
     this.state = {
       current: 0,
     };

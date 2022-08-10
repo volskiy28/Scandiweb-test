@@ -12,7 +12,6 @@ class Cart extends PureComponent {
   render() {
     const cart = this.props.cart;
     const { currency, totalQty } = this.props;
-    console.log(cart);
     let s = [];
     cart.map((item) => {
       return s.push(item.prices[currency].amount * item.qty);
