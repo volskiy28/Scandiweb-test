@@ -1,9 +1,9 @@
-import React, { Component } from "react";
+import React, {  PureComponent } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { addProductToCart, removeProductFromCart } from "../Redux/shop/actions";
 
-class CartOverlay extends Component {
+class CartOverlay extends PureComponent {
   addItem = (product) => {
     this.props.addProductToCart(product);
   };
@@ -22,7 +22,7 @@ class CartOverlay extends Component {
         <h3 id="quantity_gallery_block"> My bag</h3>
         {cart.map((item, index) => {
           return (
-            <div className="cart_overlay">
+            <div className="cart_overlay ">
               <div className="mn">
                 <div className="bag">
                   <h3 className="item_brand">{item.brand}</h3>
@@ -120,7 +120,14 @@ class CartOverlay extends Component {
           {cart.length > 0 ? (
             <div className="button_block">
               <Link to={"/cart"}>
-                <button className="viev_bag_btn">Viev bag</button>
+                <button
+                  onClick={() => {
+                    this.props.close();
+                  }}
+                  className="viev_bag_btn"
+                >
+                  Viev bag
+                </button>
               </Link>
               <button className="check_out_btn">Check out</button>
             </div>

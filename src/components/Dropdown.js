@@ -1,33 +1,29 @@
-import React from "react";
-export class Dropdown extends React.Component {
+import { PureComponent } from "react";
+export class Dropdown extends PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      isOpen: false,
       haveText: "",
     };
   }
   render() {
-    const { isOpen, haveText } = this.state;
+    const { haveText } = this.state;
+    const { isOpen } = this.props;
+
     return (
       <div
         className={isOpen ? "dropdown active-dd" : "dropdown"}
-        onClick={this.handleClick}
+        onClick={() => this.props.handleClick()}
       >
         <div id="dd-text" data-iso={haveText} className="dropdown-text">
           {!haveText ? "$" : haveText}
         </div>
+        <div className={isOpen ? "modal-backdrop" : ""}></div>
         {this.itemList(this.props.currencyList)}
       </div>
     );
   }
-
-  handleClick = () => {
-    this.setState({
-      isOpen: !this.state.isOpen,
-    });
-  };
 
   handleText = (e) => {
     this.setState({

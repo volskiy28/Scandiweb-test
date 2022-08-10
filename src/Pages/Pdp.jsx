@@ -1,9 +1,9 @@
 import { Query } from "@apollo/react-components";
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { connect } from "react-redux";
-import { productRequest } from "../query/getQueries";
+import { GET_PRODUCTS_BY_ID } from "../query/getQueries";
 import { addProductToCart } from "../Redux/shop/actions";
-class Pdp extends Component {
+class Pdp extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -56,8 +56,10 @@ class Pdp extends Component {
     const parse = require("html-react-parser");
     return (
       <Query
-        query={productRequest}
+        query={GET_PRODUCTS_BY_ID}
+        key={"key"}
         variables={{ id: window.location.pathname.slice(9) }}
+        fetchPolicy="network-only"
         onCompleted={(data) =>
           this.setState({ attributes: data.product.attributes })
         }

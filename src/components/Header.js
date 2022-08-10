@@ -1,23 +1,23 @@
 import { Query } from "@apollo/react-components";
-import React, { Component } from "react";
+import React, { PureComponent } from "react";
 import { NavLink } from "react-router-dom";
 import { getAllProducts } from "../query/getQueries";
 import CartOverlay from "./CartOverlay";
 import { Dropdown } from "./Dropdown";
 import { connect } from "react-redux";
 import logo from "../assets/a-logo.svg";
-class Header extends Component {
+class Header extends PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       cartOpen: false,
+      isOpen: false,
     };
-    this.close = this.close.bind(this);
   }
   displayCurrencySymbols = () => {
     const data = this.props.data;
     if (data.loading) {
-      return ["Loading"];
+      return <div>Loading</div>;
     } else {
       return data.currencies.map((currency) => {
         const currencyISO = {
@@ -32,6 +32,11 @@ class Header extends Component {
       });
     }
   };
+  handleClick = () => {
+    this.setState({
+      isOpen: !this.state.isOpen,
+    });
+  };
   close = () => {
     this.setState({ cartOpen: false });
   };
@@ -39,7 +44,7 @@ class Header extends Component {
     const { cartOpen } = this.state;
     const { currency, cart, totalQty } = this.props;
     return (
-      <Query query={getAllProducts}>
+      <Query key={"key1"} query={getAllProducts}>
         {({ loading, data }) => {
           if (loading) {
             return <div>loading</div>;
@@ -69,10 +74,13 @@ class Header extends Component {
                   <Dropdown
                     selectCurrency={this.props.selectCurrency}
                     currencyList={this.displayCurrencySymbols()}
+                    isOpen={this.state.isOpen}
+                    handleClick={this.handleClick}
                   />
                   <button
                     onClick={() => {
                       this.setState({ cartOpen: true });
+                      this.setState({ isOpen: false });
                     }}
                     className="cart-button "
                   >
@@ -90,10 +98,10 @@ class Header extends Component {
                   {cartOpen && (
                     <div className="cart_overlay_bag">
                       <div
+                        className="sidebar show-cart"
                         onClick={() => {
                           this.close();
                         }}
-                        className="sidebar show-cart"
                       >
                         <div
                           onClick={(e) => {

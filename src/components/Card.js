@@ -3,7 +3,14 @@ import cartImg from "../assets/Common.svg";
 import { connect } from "react-redux";
 import { addProductToCart } from "../Redux/shop/actions";
 
+
 class Card extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      id: '',
+    }
+  }
   addToCart = (product) => {
     let updatedProduct = {};
     if (product.attributes.length === 0) {
@@ -34,12 +41,12 @@ class Card extends Component {
         id: `${product.id} ${selectedAttribute.map((i) => i.id).join(" ")}`,
       };
       this.props.addProductToCart(updatedProduct);
-      console.log(updatedAttributes);
     }
   };
   render() {
     const { item, price } = this.props;
     return (
+      
       <div className={`card ${!item.inStock && "nostock"}`}>
         <img
           src={item.gallery[0]}

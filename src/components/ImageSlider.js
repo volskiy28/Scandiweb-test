@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, {  PureComponent } from 'react';
 
-class ImageSlider extends Component {
+class ImageSlider extends PureComponent {
   // eslint-disable-next-line no-useless-constructor
   constructor(props) {
     super(props);

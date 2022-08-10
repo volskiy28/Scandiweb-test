@@ -1,6 +1,6 @@
 import { gql } from "@apollo/client";
 
-const getAllProducts = gql`
+export const getAllProducts = gql`
   query {
     categories {
       name
@@ -36,51 +36,18 @@ const getAllProducts = gql`
   }
 `;
 
-const getAllCategories = gql`
-  query {
+export const getAllCategories = gql`
+  {
     categories {
       name
     }
-
     currencies {
       symbol
     }
   }
 `;
 
-const categoryRequest = (category) => gql`
-query {
-  category (input: {title: "${category}"}) {
-    products {
-          id
-          name
-          inStock
-          gallery
-          description
-          category
-          brand
-          attributes {
-            id
-            name
-            type
-            items {
-              id
-              displayValue
-              value
-            }
-          }
-          prices {
-            currency {
-              symbol
-            }
-            amount
-          }
-        }
-  }
-  }
-          
-`;
- const GET_PRODUCTS_BY_CATEGORY = gql`
+export const GET_PRODUCTS_BY_CATEGORY = gql`
   query category($input: CategoryInput) {
     category(input: $input) {
       products {
@@ -109,7 +76,35 @@ query {
     }
   }
 `;
-const productRequest = gql`
+
+//     product(id: $id) {
+//       id
+//       name
+//       inStock
+//       gallery
+//       description
+//       attributes {
+//         id
+//         name
+//         type
+//         items {
+//           id
+//           displayValue
+//           value
+//         }
+//       }
+//       prices {
+//         currency {
+//           label
+//           symbol
+//         }
+//         amount
+//       }
+//       brand
+//     }
+//   }
+// `;
+export const GET_PRODUCTS_BY_ID = gql`
   query product($id: String!) {
     product(id: $id) {
       id
@@ -138,5 +133,3 @@ const productRequest = gql`
     }
   }
 `;
-
-export { getAllProducts, getAllCategories, productRequest, categoryRequest, GET_PRODUCTS_BY_CATEGORY };
