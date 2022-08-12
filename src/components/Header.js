@@ -42,13 +42,10 @@ class Header extends PureComponent {
     this.setState({ cartOpen: false });
   };
   disableOverflow = () => {
-    if (this.state.cartOpen) {
-      document.body.style.overflow = "hidden";
-      document.body.style.height = "100%";
-    } else {
-      document.body.style.overflow = "scroll";
-      document.body.style.height = "100%";
-    }
+    document.body.style.overflow = "hidden";
+  };
+  enebleOverflow = () => {
+    document.body.style.overflow = "scroll";
   };
   render() {
     const { cartOpen } = this.state;
@@ -114,6 +111,7 @@ class Header extends PureComponent {
                         className="sidebar show-cart"
                         onClick={() => {
                           this.close();
+                          this.enebleOverflow();
                         }}
                       >
                         <div
