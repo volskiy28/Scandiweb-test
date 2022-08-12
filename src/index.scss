@@ -34,12 +34,6 @@ body {
   -moz-osx-font-smoothing: grayscale;
   font-family: "Raleway", sans-serif;
 }
-.disable_scroll {
-  body {
-    height: 100%;
-    overflow: hidden;
-  }
-}
 body::-webkit-scrollbar {
   width: 0px;
 }
@@ -362,7 +356,7 @@ a {
   display: flex;
 }
 
-.mini-cart-item__attributes-list
+.mini-cart-item__attributes-list,
   div:not(.mini-cart-item__attributes-list div:last-child) {
   margin-right: 8px;
 }

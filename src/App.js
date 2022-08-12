@@ -13,7 +13,6 @@ class App extends PureComponent {
     super(props);
     this.state = {
       currencyKey: 0,
-      attrib: [],
     };
     this.selectCurrency = this.selectCurrency.bind(this);
   }

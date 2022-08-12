@@ -77,33 +77,6 @@ export const GET_PRODUCTS_BY_CATEGORY = gql`
   }
 `;
 
-//     product(id: $id) {
-//       id
-//       name
-//       inStock
-//       gallery
-//       description
-//       attributes {
-//         id
-//         name
-//         type
-//         items {
-//           id
-//           displayValue
-//           value
-//         }
-//       }
-//       prices {
-//         currency {
-//           label
-//           symbol
-//         }
-//         amount
-//       }
-//       brand
-//     }
-//   }
-// `;
 export const GET_PRODUCTS_BY_ID = gql`
   query product($id: String!) {
     product(id: $id) {

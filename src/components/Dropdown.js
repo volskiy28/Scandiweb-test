@@ -14,7 +14,9 @@ export class Dropdown extends PureComponent {
     return (
       <div
         className={isOpen ? "dropdown active-dd" : "dropdown"}
-        onClick={() => this.props.handleClick()}
+        onClick={() => {
+          this.props.handleClick()
+        }}
       >
         <div id="dd-text" data-iso={haveText} className="dropdown-text">
           {!haveText ? "$" : haveText}

@@ -36,13 +36,24 @@ class Header extends PureComponent {
     this.setState({
       isOpen: !this.state.isOpen,
     });
+    this.close();
   };
   close = () => {
     this.setState({ cartOpen: false });
   };
+  disableOverflow = () => {
+    if (this.state.cartOpen) {
+      document.body.style.overflow = "hidden";
+      document.body.style.height = "100%";
+    } else {
+      document.body.style.overflow = "scroll";
+      document.body.style.height = "100%";
+    }
+  };
   render() {
     const { cartOpen } = this.state;
     const { currency, cart, totalQty } = this.props;
+    console.log(this.state.cartOpen);
     return (
       <Query key={"key1"} query={getAllProducts}>
         {({ loading, data }) => {
@@ -76,11 +87,13 @@ class Header extends PureComponent {
                     currencyList={this.displayCurrencySymbols()}
                     isOpen={this.state.isOpen}
                     handleClick={this.handleClick}
+                    close={this.close}
                   />
                   <button
                     onClick={() => {
                       this.setState({ cartOpen: true });
                       this.setState({ isOpen: false });
+                      this.disableOverflow();
                     }}
                     className="cart-button "
                   >
