@@ -119,7 +119,11 @@ class Header extends PureComponent {
                             e.stopPropagation();
                           }}
                         >
-                          <CartOverlay close={this.close} currency={currency} />
+                          <CartOverlay
+                            close={this.close}
+                            enebleOverflow={this.enebleOverflow}
+                            currency={currency}
+                          />
                         </div>
                       </div>
                     </div>

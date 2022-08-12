@@ -1,4 +1,4 @@
-import React, {  PureComponent } from "react";
+import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 import { addProductToCart, removeProductFromCart } from "../Redux/shop/actions";
@@ -123,6 +123,7 @@ class CartOverlay extends PureComponent {
                 <button
                   onClick={() => {
                     this.props.close();
+                    this.props.enebleOverflow();
                   }}
                   className="viev_bag_btn"
                 >
