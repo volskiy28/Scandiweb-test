@@ -40,6 +40,7 @@ class App extends PureComponent {
                     currency={currencyKey}
                     data={data}
                     selectCurrency={this.selectCurrency}
+                    categories = {categories}
                   />
                   <Routes>
                     <Route
