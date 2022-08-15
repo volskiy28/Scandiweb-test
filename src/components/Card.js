@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import cartImg from "../assets/Common.svg";
 import { connect } from "react-redux";
-import { addProductToCart } from "../Redux/shop/actions";
+import { addToCart, cart } from "../Redux/cartSlice";
 
 
 class Card extends Component {
@@ -11,7 +11,7 @@ class Card extends Component {
       id: '',
     }
   }
-  addToCart = (product) => {
+  addProductToCart = (product) => {
     let updatedProduct = {};
     if (product.attributes.length === 0) {
       updatedProduct = {
@@ -19,7 +19,7 @@ class Card extends Component {
         qty: 1,
         id: `${product.id} `,
       };
-      this.props.addProductToCart(updatedProduct);
+      this.props.addToCart(updatedProduct);
     } else {
       const updatedAttributes = product.attributes.map((a) => {
         return {
@@ -40,7 +40,8 @@ class Card extends Component {
         qty: 1,
         id: `${product.id} ${selectedAttribute.map((i) => i.id).join(" ")}`,
       };
-      this.props.addProductToCart(updatedProduct);
+      this.props.addToCart(updatedProduct);
+      console.log(this.props.cart)
     }
   };
   render() {
@@ -62,7 +63,7 @@ class Card extends Component {
         {item.inStock && (
           <div className="div" onClick={(e) => e.preventDefault()}>
             <img
-              onClick={() => this.addToCart(item)}
+              onClick={() => this.addProductToCart(item)}
               width={52}
               height={52}
               src={cartImg}
@@ -76,16 +77,4 @@ class Card extends Component {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    cart: state.shop.cart,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  addProductToCart: (product) => dispatch(addProductToCart(product)),
-});
-
-const functionFromConnect = connect(mapStateToProps, mapDispatchToProps);
-
-export default functionFromConnect(Card);
+export default connect(state => ({ cart: cart(state) }), { addToCart })(Card)

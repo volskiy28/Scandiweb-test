@@ -36,7 +36,7 @@ class App extends PureComponent {
               const { currencyKey } = this.state;
               return (
                 <div>
-                  <Header
+                <Header
                     currency={currencyKey}
                     data={data}
                     selectCurrency={this.selectCurrency}

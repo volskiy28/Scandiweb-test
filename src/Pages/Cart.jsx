@@ -1,13 +1,13 @@
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import ImageSlider from "../components/ImageSlider";
-import { addProductToCart, removeProductFromCart } from "../Redux/shop/actions";
+import { addToCart, removeFromCart, cart, totalQty   } from "../Redux/cartSlice";
 class Cart extends PureComponent {
   addItem = (product) => {
-    this.props.addProductToCart(product);
+    this.props.addToCart(product);
   };
   deleteItem = (product) => {
-    this.props.removeProductFromCart(product);
+    this.props.removeFromCart(product);
   };
   render() {
     const cart = this.props.cart;
@@ -149,18 +149,4 @@ class Cart extends PureComponent {
     );
   }
 }
-const mapStateToProps = (state) => {
-  return {
-    cart: state.shop.cart,
-    totalQty: state.shop.totalQty,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  removeProductFromCart: (product) => dispatch(removeProductFromCart(product)),
-  addProductToCart: (product) => dispatch(addProductToCart(product)),
-});
-
-const functionFromConnect = connect(mapStateToProps, mapDispatchToProps);
-
-export default functionFromConnect(Cart);
+export default connect(state => ({ cart: cart(state), totalQty: totalQty(state) }), { addToCart, removeFromCart })(Cart)

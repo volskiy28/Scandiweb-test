@@ -2,7 +2,7 @@ import { Query } from "@apollo/react-components";
 import React, { PureComponent } from "react";
 import { connect } from "react-redux";
 import { GET_PRODUCTS_BY_ID } from "../query/getQueries";
-import { addProductToCart } from "../Redux/shop/actions";
+import { addToCart, totalQty, cart } from "../Redux/cartSlice";
 class Pdp extends PureComponent {
   constructor(props) {
     super(props);
@@ -45,7 +45,7 @@ class Pdp extends PureComponent {
         id: newId,
       };
 
-      this.props.addProductToCart(updatedProduct);
+      this.props.addToCart(updatedProduct);
     }
   };
   setPhotoSrc = (photo) => {
@@ -183,16 +183,4 @@ class Pdp extends PureComponent {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    cart: state.shop.cart,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  addProductToCart: (product) => dispatch(addProductToCart(product)),
-});
-
-const functionFromConnect = connect(mapStateToProps, mapDispatchToProps);
-
-export default functionFromConnect(Pdp);
+export default connect(state => ({ cart: cart(state), totalQty: totalQty(state) }), { addToCart })(Pdp)

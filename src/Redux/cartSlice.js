@@ -1,12 +1,16 @@
+import { createSlice } from "@reduxjs/toolkit";
+
 const initialState = {
   cart: [],
   totalQty: 0,
 };
 
-export default function reducer(state = initialState, action) {
-  switch (action.type) {
-    case "ADD_PRODUCT_TO_CART":
-      const { product } = action.payload;
+export const cartSlice = createSlice({
+  name: "shop",
+  initialState,
+  reducers: {
+    addToCart: (state, action, product) => {
+      product = action.payload;
       const item = state.cart.find((cartItem) => cartItem.id === product.id);
       let newState = {};
       if (item) {
@@ -24,7 +28,6 @@ export default function reducer(state = initialState, action) {
             return acc + item.qty;
           }, 1),
         };
-
         return newState;
       }
       newState = {
@@ -35,9 +38,9 @@ export default function reducer(state = initialState, action) {
         }, 1),
       };
       return newState;
-
-    case "REMOVE_PRODUCT_FROM_CART":
-      const { productToRemove } = action.payload;
+    },
+    removeFromCart: (state, action, productToRemove) => {
+      productToRemove = action.payload;
       const itemToRemove = state.cart.find(
         (product) => product.id === productToRemove.id
       );
@@ -65,7 +68,12 @@ export default function reducer(state = initialState, action) {
 
         return updatedState;
       }
-    default:
-      return state;
-  }
-}
+    },
+  },
+});
+
+export const { addToCart, removeFromCart } = cartSlice.actions;
+export const cart = (state) => state.shop.cart;
+export const totalQty = (state) => state.shop.totalQty;
+
+export default cartSlice.reducer;

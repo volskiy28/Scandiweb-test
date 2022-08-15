@@ -4,6 +4,7 @@ import CartOverlay from "./CartOverlay";
 import { Dropdown } from "./Dropdown";
 import { connect } from "react-redux";
 import logo from "../assets/a-logo.svg";
+import { cart, totalQty } from "../Redux/cartSlice";
 class Header extends PureComponent {
   constructor(props) {
     super(props);
@@ -48,7 +49,6 @@ class Header extends PureComponent {
   render() {
     const { cartOpen } = this.state;
     const { currency, cart, totalQty, categories } = this.props;
-    console.log(this.state.cartOpen);
     return (
       <div className="header">
         <div className="category_list">
@@ -124,12 +124,7 @@ class Header extends PureComponent {
   }
 }
 
-const mapStateToProps = (state) => {
-  return {
-    cart: state.shop.cart,
-    totalQty: state.shop.totalQty,
-  };
-};
-
-const functionFromConnect = connect(mapStateToProps, null);
-export default functionFromConnect(Header);
+export default connect((state) => ({
+  cart: cart(state),
+  totalQty: totalQty(state),
+}))(Header);

@@ -1,14 +1,14 @@
 import React, { PureComponent } from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { addProductToCart, removeProductFromCart } from "../Redux/shop/actions";
+import { addToCart, removeFromCart, cart, totalQty } from "../Redux/cartSlice";
 
 class CartOverlay extends PureComponent {
   addItem = (product) => {
-    this.props.addProductToCart(product);
+    this.props.addToCart(product);
   };
   deleteItem = (product) => {
-    this.props.removeProductFromCart(product);
+    this.props.removeFromCart(product);
   };
   render() {
     const { currency, cart } = this.props;
@@ -140,18 +140,4 @@ class CartOverlay extends PureComponent {
     );
   }
 }
-const mapStateToProps = (state) => {
-  return {
-    cart: state.shop.cart,
-    totalQty: state.shop.totalQty,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => ({
-  removeProductFromCart: (product) => dispatch(removeProductFromCart(product)),
-  addProductToCart: (product) => dispatch(addProductToCart(product)),
-});
-
-const functionFromConnect = connect(mapStateToProps, mapDispatchToProps);
-
-export default functionFromConnect(CartOverlay);
+export default connect(state => ({ cart: cart(state), totalQty: totalQty(state) }), { addToCart, removeFromCart })(CartOverlay)
