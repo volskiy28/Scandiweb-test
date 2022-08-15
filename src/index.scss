@@ -187,10 +187,14 @@ body::-webkit-scrollbar {
   margin-bottom: 20px;
   object-fit: contain;
   margin-right: 50px;
+  width: 80px;
+  height: 80px;
 }
 .main_img {
   object-fit: contain;
   margin-right: 50px;
+  width: 511px;
+  height: 511px;
 }
 .button_change {
   border: none;
@@ -650,9 +654,3 @@ a {
   right: 10%;
   bottom: 8%;
 }
-
-
-
-
-
-

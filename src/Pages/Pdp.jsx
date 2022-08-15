@@ -81,8 +81,6 @@ class Pdp extends PureComponent {
                           key={img.id}
                           className="secondary_img"
                           alt="product_img"
-                          width={80}
-                          height={80}
                           src={img}
                           onClick={() => {
                             this.setPhotoSrc(img);
@@ -99,8 +97,6 @@ class Pdp extends PureComponent {
                         : product.gallery[0]
                     }
                     alt="product_img"
-                    width={511}
-                    height={511}
                   />
                   <div>
                     <h1>{product.brand}</h1>
@@ -169,7 +165,6 @@ class Pdp extends PureComponent {
                           Out of stock
                         </button>
                       )}
-
                       <p> {parse(product.description)}</p>
                     </div>
                   </div>
@@ -183,4 +178,7 @@ class Pdp extends PureComponent {
   }
 }
 
-export default connect(state => ({ cart: cart(state), totalQty: totalQty(state) }), { addToCart })(Pdp)
+export default connect(
+  (state) => ({ cart: cart(state), totalQty: totalQty(state) }),
+  { addToCart }
+)(Pdp);

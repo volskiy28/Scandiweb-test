@@ -40,8 +40,9 @@ class Home extends Component {
                 <div className="card_set container">
                   {products.map((product) => {
                     return (
-                      <Link to={`/product/${product.id}`}>
+                      <Link key={product.id} to={`/product/${product.id}`}>
                         <Card
+                          key={product.id}
                           item={product}
                           price={
                             product.prices[currency].currency.symbol +

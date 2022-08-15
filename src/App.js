@@ -36,11 +36,11 @@ class App extends PureComponent {
               const { currencyKey } = this.state;
               return (
                 <div>
-                <Header
+                  <Header
                     currency={currencyKey}
                     data={data}
                     selectCurrency={this.selectCurrency}
-                    categories = {categories}
+                    categories={categories}
                   />
                   <Routes>
                     <Route
@@ -50,6 +50,7 @@ class App extends PureComponent {
                     {categories.map((cat) => {
                       return (
                         <Route
+                          key={cat.name}
                           path={`/${cat.name}`}
                           element={
                             <Home

@@ -15,7 +15,7 @@ export class Dropdown extends PureComponent {
       <div
         className={isOpen ? "dropdown active-dd" : "dropdown"}
         onClick={() => {
-          this.props.handleClick()
+          this.props.handleClick();
         }}
       >
         <div id="dd-text" data-iso={haveText} className="dropdown-text">
@@ -36,7 +36,7 @@ export class Dropdown extends PureComponent {
   itemList = (props) => {
     let i = 0;
     const list = props.map((item) => (
-      <div onClick={this.handleText}>
+      <div key={item} onClick={this.handleText}>
         <li
           className="dropdown-item"
           key={item.toString()}
